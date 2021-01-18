@@ -79,3 +79,4 @@ confirm-gui:
       - '&7confirm or cancel your ticket purchase.'
   cancel-message: '&c&l(!) &cYou have canceled your ticket purchase!'
 
+max: 1000

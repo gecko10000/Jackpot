@@ -67,14 +67,20 @@ public class JackpotManager implements CommandExecutor {
                 if (args.length > 0) {
                     if (args[0].equalsIgnoreCase("buy") || args[0].equalsIgnoreCase("bet") || args[0].equalsIgnoreCase("place")) {
                         long amt = 1;
+                        long oldAmt = TICKETS.getOrDefault(player.getUniqueId().toString(), 0L);
+                        long max = PLUGIN.getConfig().getLong("max");
                         if (args.length >= 2) {
                             try {
                                 amt = Long.parseLong(args[1]);
                                 if (amt < 1) { throw new NumberFormatException(); }
                             } catch (NumberFormatException e) {
-                                player.sendMessage("Â§cÂ§l(!) Â§c/jackpot buy <amount>");
+                                player.sendMessage("§c§l(!) §c/jackpot buy <amount>");
                                 return true;
                             }
+                        }
+                        if (max < oldAmt + amt) {
+                            player.sendMessage("§c§l(!) §cYou can only buy " + max + " tickets.");
+                            return true;
                         }
                         long total = MessageHandler.getJackpotValue("ticket-price") * amt;
                         if (ECON.getBalance(player) >= total) {
@@ -92,12 +98,12 @@ public class JackpotManager implements CommandExecutor {
                             PLUGIN.saveConfig();
                             Bukkit.getServer().getPluginManager().disablePlugin(PLUGIN);
                             Bukkit.getServer().getPluginManager().enablePlugin(PLUGIN);
-                            player.sendMessage("Â§aÂ§l(!) Â§aJackpot successfully reloaded the config.");
+                            player.sendMessage("§a§l(!) §aJackpot successfully reloaded the config.");
                         } else {
-                            player.sendMessage("Â§cÂ§l(!) Â§cYou do not have permission to use that command!");
+                            player.sendMessage("§c§l(!) §cYou do not have permission to use that command!");
                         }
                     } else {
-                        player.sendMessage("Â§cÂ§l(!) Â§c/jackpot buy <amount>");
+                        player.sendMessage("§c§l(!) §c/jackpot buy <amount>");
                     }
                 } else {
                     long amount = 0;

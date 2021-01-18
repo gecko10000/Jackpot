@@ -1,8 +1,9 @@
 package com.technovision.jackpot.messages;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.technovision.jackpot.Jackpot;
 import com.technovision.jackpot.system.JackpotManager;
+
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -19,7 +20,7 @@ public class MessageHandler {
         for (String line : msg) {
             line = line.replace("{prize}", prize);
             line = line.replace("{winner}", winner);
-            line = line.replace("&", "ยง");
+            line = line.replace("&", "ง");
             parsedMsg.add(line);
         }
         return parsedMsg;
@@ -35,7 +36,7 @@ public class MessageHandler {
             line = line.replace("{player-tickets}", FORMATTER.format(playerTickets));
             line = line.replace("{player-percent}", String.valueOf(playerPercent));
             line = line.replace("{timer}", TIMER.getTime());
-            line = line.replace("&", "ยง");
+            line = line.replace("&", "ง");
             parsedMsg.add(line);
         }
         return parsedMsg;
@@ -48,7 +49,7 @@ public class MessageHandler {
         for (String line : msg) {
             line = line.replace("{total-value}", money);
             line = line.replace("{timer}", TIMER.getShortTime());
-            line = line.replace("&", "ยง");
+            line = line.replace("&", "ง");
             parsedMsg.add(line);
         }
         return parsedMsg;
@@ -58,7 +59,7 @@ public class MessageHandler {
         String msg = Jackpot.PLUGIN.getConfig().getString("messages." + section);
         msg = msg.replace("{amount}", String.valueOf(amt));
         msg = msg.replace("{price}", FORMATTER.format(PLUGIN.getConfig().getInt("jackpot.ticket-price") * amt));
-        msg = msg.replace("&", "ยง");
+        msg = msg.replace("&", "ง");
         return msg;
     }
 
@@ -66,7 +67,7 @@ public class MessageHandler {
         String msg = Jackpot.PLUGIN.getConfig().getString("confirm-gui." + section);
         msg = msg.replace("{amount}", FORMATTER.format(amt));
         msg = msg.replace("{price}", FORMATTER.format(price));
-        msg = msg.replace("&", "ยง");
+        msg = msg.replace("&", "ง");
         return msg;
     }
 
@@ -75,7 +76,7 @@ public class MessageHandler {
         String name = PLUGIN.getConfig().getString("confirm-gui." + button + ".name");
         List<String> lore = PLUGIN.getConfig().getStringList("confirm-gui." + button + ".lore");
 
-        name = name.replace("&","ยง" );
+        name = name.replace("&","ง" );
         name = name.replace("{amount}", amt);
         name = name.replace("{price}", price);
 
@@ -83,19 +84,19 @@ public class MessageHandler {
         for (String line : lore) {
             line = line.replace("{amount}", amt);
             line = line.replace("{price}", price);
-            line = line.replace("&", "ยง");
+            line = line.replace("&", "ง");
             parsedLore.add(line);
         }
 
         try {
-            ItemStack item = XMaterial.valueOf(material).parseItem();
+            ItemStack item = new ItemStack(Material.getMaterial(material));
             ItemMeta meta = item.getItemMeta();
             meta.setDisplayName(name);
             meta.setLore(parsedLore);
             item.setItemMeta(meta);
             return item;
         } catch (IllegalArgumentException ignored) { }
-        return XMaterial.AIR.parseItem();
+        return new ItemStack(Material.AIR);
     }
 
     public static int getJackpotValue(String section) {
